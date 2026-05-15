@@ -27,7 +27,7 @@ export class Snippets implements OnInit {
     this.load();
   }
 
-  // 🔥 تحويل من API للشكل القديم
+  // Map API response to snippet model
   mapToSnippet(api: ApiScript): Snippet {
     return {
       id: api.id,
@@ -43,7 +43,7 @@ export class Snippets implements OnInit {
     setTimeout(() => this.savedMessage.set(''), 2000);
   }
 
-  // ✅ LOAD FROM API
+  // Load snippets
   load() {
     this.service.getAll().subscribe({
       next: (res) => {
@@ -53,7 +53,7 @@ export class Snippets implements OnInit {
     });
   }
 
-  // ✅ CREATE
+  // Create snippet
   save() {
     if (!this.title.trim() || !this.sql.trim()) {
       alert('Please fill in all required fields');
@@ -77,31 +77,33 @@ export class Snippets implements OnInit {
         this.selectedFile = null;
 
         this.load();
-        this.showSaveMessage();
+        this.showSaveMessage('✓ Script added successfully');
       },
       error: (error) => {
         console.error('Error saving script:', error);
-        alert('حدث خطأ أثناء الحفظ. تأكد من أنك مسجل الدخول وأن بريدك الإلكتروني موجود.');
+        alert(
+          'An error occurred while saving. Please make sure you are logged in and your email is available.',
+        );
       },
     });
   }
 
-  // ✅ DELETE
+  // Delete snippet
   deleteSnippet(id: number) {
-    if (confirm('Are you sure you want to delete this snippet?')) {
+    if (confirm('Are you sure you want to delete this script?')) {
       this.service.delete(id).subscribe(() => {
         this.snippets.update((list) => list.filter((s) => s.id !== id));
-        this.showSaveMessage();
+        this.showSaveMessage('✓ Script deleted successfully');
       });
     }
   }
 
-  // ✅ EDIT START
+  // Begin editing snippet
   startEdit(snippet: Snippet) {
     this.editingSnippet.set({ ...snippet });
   }
 
-  // ✅ UPDATE
+  // Save edited snippet
   saveEdit() {
     const editing = this.editingSnippet();
     if (!editing) return;
@@ -119,7 +121,7 @@ export class Snippets implements OnInit {
     this.service.update(editing.id, formData).subscribe(() => {
       this.load();
       this.editingSnippet.set(null);
-      this.showSaveMessage();
+      this.showSaveMessage('✓ Script updated successfully');
     });
   }
 
@@ -144,7 +146,7 @@ export class Snippets implements OnInit {
     reader.readAsText(file);
   }
 
-  // ✅ DOWNLOAD
+  // Download script SQL
   downloadSQL(snippet: Snippet) {
     if (snippet.fileUrl) {
       window.open(snippet.fileUrl, '_blank');
@@ -152,7 +154,7 @@ export class Snippets implements OnInit {
     }
 
     if (!snippet.sql) {
-      alert('لا توجد بيانات');
+      alert('No SQL data available.');
       return;
     }
 
@@ -167,7 +169,7 @@ export class Snippets implements OnInit {
     window.URL.revokeObjectURL(url);
   }
 
-  // 🔍 SEARCH
+  // Filter snippet list
   get filteredSnippets(): Snippet[] {
     const search = this.snippetSearch().trim().toLowerCase();
     if (!search) return this.snippets();

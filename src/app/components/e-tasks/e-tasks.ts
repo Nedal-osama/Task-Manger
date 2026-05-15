@@ -161,6 +161,10 @@ export class ETasks implements OnInit, OnDestroy {
   }
 
   deleteTask(id: string | number) {
+    if (!confirm('Are you sure you want to delete this task?')) {
+      return;
+    }
+
     this.service.delete(id as number).subscribe(() => {
       this.selectedTasks.update((tasks) => tasks.filter((t) => t !== id));
       this.showSaveMessage('✓ Task deleted successfully');
@@ -185,13 +189,17 @@ export class ETasks implements OnInit, OnDestroy {
     const selected = this.selectedTasks();
     if (!selected.length) return;
 
+    if (!confirm('Are you sure you want to delete the selected tasks?')) {
+      return;
+    }
+
     this.service.deleteMultiple(selected as number[]).subscribe(() => {
       this.selectedTasks.set([]);
-      this.showSaveMessage('✓ Tasks deleted');
+      this.showSaveMessage('✓ Selected tasks deleted successfully');
     });
   }
 
-  // 🔥 Export Excel
+  // Export tasks to Excel
   exportToExcel() {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Tasks');

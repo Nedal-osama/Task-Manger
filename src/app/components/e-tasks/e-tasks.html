@@ -104,9 +104,7 @@
               <th></th>
               <th>Task</th>
               <th>Solution</th>
-              <!-- ✅ -->
               <th>Path</th>
-              <!-- ✅ -->
               <th>Start Date</th>
               <th>End Date</th>
               <th>Status</th>
@@ -138,7 +136,6 @@
                   }
                 </td>
 
-                <!-- ✅ Solution -->
                 <td>
                   @if (editingTask()?.id !== task.id) {
                     {{ task.solution || '-' }}
@@ -147,7 +144,6 @@
                   }
                 </td>
 
-                <!-- ✅ Path -->
                 <td>
                   @if (editingTask()?.id !== task.id) {
                     @if (task.path) {
