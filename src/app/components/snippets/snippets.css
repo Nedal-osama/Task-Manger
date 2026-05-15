@@ -115,11 +115,14 @@ textarea {
 }
 
 .snippet-actions button {
-  width: 110px;
+  min-width: 110px;
   min-height: 44px;
   padding: 0.75rem 1rem;
   white-space: nowrap;
   justify-content: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 /* FILE UPLOAD */
@@ -164,9 +167,9 @@ textarea {
 .btn-icon {
   width: 18px;
   height: 18px;
-  margin-right: 0.5rem;
-  display: inline-block;
-  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
 }
 
@@ -180,13 +183,14 @@ textarea {
   font-weight: 600;
   transition: all 0.2s ease;
   box-shadow: var(--shadow-sm);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.025em;
   background: linear-gradient(135deg, var(--success-500), var(--success-600));
   color: white;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   min-height: 42px;
 }
 
