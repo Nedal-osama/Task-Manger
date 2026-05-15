@@ -87,6 +87,31 @@ textarea {
   border: 1px solid var(--gray-200);
 }
 
+.saved-scripts-header {
+  margin: 2rem 0 1rem;
+}
+
+.section-heading {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  position: relative;
+}
+
+.section-heading::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -0.5rem;
+  width: 70px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary-500), var(--primary-600));
+}
+
 /* Header */
 .snippet-header {
   display: flex;
