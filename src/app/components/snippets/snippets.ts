@@ -38,8 +38,8 @@ export class Snippets implements OnInit {
     };
   }
 
-  showSaveMessage() {
-    this.savedMessage.set('✓ Data saved successfully');
+  showSaveMessage(message = '✓ Data saved successfully') {
+    this.savedMessage.set(message);
     setTimeout(() => this.savedMessage.set(''), 2000);
   }
 
