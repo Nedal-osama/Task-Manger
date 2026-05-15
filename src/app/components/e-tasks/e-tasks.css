@@ -77,10 +77,10 @@ h2::after {
 
 .form-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
   align-items: end;
-  margin-bottom: 0;
+  margin-bottom: 1.5rem;
 }
 
 .task-input,
@@ -163,6 +163,7 @@ h2::after {
   box-shadow: var(--shadow-md);
   border: none;
   white-space: nowrap;
+  min-width: 170px;
 }
 
 .add-btn:hover {
