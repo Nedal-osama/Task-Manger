@@ -78,6 +78,15 @@
       </button>
     </form>
 
+    @if (loading) {
+      <div class="login-loading-overlay">
+        <div class="login-loading-card">
+          <span class="loader-large"></span>
+          <p>Signing you in...</p>
+        </div>
+      </div>
+    }
+
     <!-- Footer -->
     <div class="footer-text">
       <p>Secure login powered by modern authentication</p>
