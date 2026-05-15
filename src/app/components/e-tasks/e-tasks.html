@@ -1,0 +1,262 @@
+<div style="max-width: 1400px; margin: 0 auto; padding: 2rem">
+  <h2>Task Management</h2>
+
+  <!-- Toast Notification -->
+  @if (savedMessage()) {
+    <div class="save-message">
+      {{ savedMessage() }}
+    </div>
+  }
+
+  <!-- Add new task form -->
+  <div class="form-container">
+    <div class="form-row">
+      <input [(ngModel)]="taskName" placeholder="Task Name" type="text" class="task-input" />
+
+      <input
+        [(ngModel)]="taskStartDate"
+        type="datetime-local"
+        class="date-input"
+        placeholder="Start Date/Time"
+      />
+
+      <select [(ngModel)]="taskStatus" class="status-select">
+        @for (status of statusOptions; track status) {
+          <option [value]="status">{{ status }}</option>
+        }
+      </select>
+
+      <select [(ngModel)]="taskPriority" class="priority-select">
+        @for (priority of priorityOptions; track priority) {
+          <option [value]="priority">{{ priority }}</option>
+        }
+      </select>
+
+      <button (click)="addTask()" class="add-btn">Add Task</button>
+    </div>
+
+    <div class="form-row">
+      <input
+        [(ngModel)]="taskSolution"
+        placeholder="Solution (optional)"
+        type="text"
+        class="task-input"
+      />
+
+      <input
+        [(ngModel)]="taskPath"
+        placeholder="Path URL (optional)"
+        type="text"
+        class="task-input"
+      />
+    </div>
+  </div>
+
+  <!-- Controls -->
+  @if (tasks().length > 0) {
+    <div class="controls-container">
+      <div class="search-row">
+        <input
+          [(ngModel)]="taskSearchName"
+          placeholder="Search by task name"
+          type="text"
+          class="search-input"
+        />
+
+        <input [(ngModel)]="taskSearchDate" type="date" class="date-input" />
+
+        @if (taskSearchName || taskSearchDate) {
+          <button (click)="clearTaskSearch()" class="cancel-btn">Clear</button>
+        }
+      </div>
+
+      <div class="bulk-actions">
+        <label class="select-all">
+          <input
+            type="checkbox"
+            [checked]="selectedTasks().length === tasks().length && tasks().length > 0"
+            [indeterminate]="selectedTasks().length > 0 && selectedTasks().length < tasks().length"
+            (change)="selectAllTasks()"
+          />
+          Select All
+        </label>
+
+        <button
+          (click)="deleteSelectedTasks()"
+          [disabled]="selectedTasks().length === 0"
+          class="delete-selected-btn"
+        >
+          Delete Selected ({{ selectedTasks().length }})
+        </button>
+
+        <button (click)="exportToExcel()" class="export-btn">Export to CSV</button>
+      </div>
+    </div>
+  }
+
+  <!-- Table -->
+  @if (tasks().length > 0) {
+    <div class="table-container">
+      @if (filteredTasks.length > 0) {
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Task</th>
+              <th>Solution</th>
+              <!-- ✅ -->
+              <th>Path</th>
+              <!-- ✅ -->
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Status</th>
+              <th>Priority</th>
+              <th>Done</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (task of filteredTasks; track task.id) {
+              <tr [class.selected]="selectedTasks().includes(task.id!)">
+                <!-- checkbox -->
+                <td>
+                  <input
+                    type="checkbox"
+                    [checked]="selectedTasks().includes(task.id!)"
+                    [disabled]="!isTaskSelectable(task)"
+                    (change)="toggleTaskSelection(task.id!)"
+                  />
+                </td>
+
+                <!-- Task -->
+                <td>
+                  @if (editingTask()?.id !== task.id) {
+                    {{ task.name }}
+                  } @else {
+                    <input [(ngModel)]="editingTask()!.name" type="text" class="edit-input" />
+                  }
+                </td>
+
+                <!-- ✅ Solution -->
+                <td>
+                  @if (editingTask()?.id !== task.id) {
+                    {{ task.solution || '-' }}
+                  } @else {
+                    <textarea [(ngModel)]="editingSolution" class="edit-input"></textarea>
+                  }
+                </td>
+
+                <!-- ✅ Path -->
+                <td>
+                  @if (editingTask()?.id !== task.id) {
+                    @if (task.path) {
+                      <a [href]="task.path" target="_blank" rel="noopener">{{ task.path }}</a>
+                    } @else {
+                      -
+                    }
+                  } @else {
+                    <input
+                      [(ngModel)]="editingPath"
+                      type="text"
+                      class="edit-input"
+                      placeholder="Path URL"
+                    />
+                  }
+                </td>
+
+                <!-- Start Date -->
+                <td>
+                  @if (editingTask()?.id !== task.id) {
+                    {{ task.startDate ? toDisplayDateTime(task.startDate) : '-' }}
+                  } @else {
+                    <input
+                      [(ngModel)]="editingStartDateValue"
+                      type="datetime-local"
+                      class="edit-input"
+                    />
+                  }
+                </td>
+
+                <!-- End Date -->
+                <td>
+                  @if (editingTask()?.id !== task.id) {
+                    {{ task.dueDate ? toDisplayDateTime(task.dueDate) : '-' }}
+                  } @else {
+                    <input
+                      [(ngModel)]="editingDueDateValue"
+                      type="datetime-local"
+                      class="edit-input"
+                    />
+                  }
+                </td>
+
+                <!-- Status -->
+                <td>
+                  @if (editingTask()?.id !== task.id) {
+                    <span [class]="getStatusClass(task.status)">
+                      {{ task.status }}
+                    </span>
+                  } @else {
+                    <select [(ngModel)]="editingTask()!.status" class="edit-select">
+                      @for (status of statusOptions; track status) {
+                        <option [value]="status">{{ status }}</option>
+                      }
+                    </select>
+                  }
+                </td>
+
+                <!-- Priority -->
+                <td>
+                  @if (editingTask()?.id !== task.id) {
+                    <span [class]="getPriorityClass(task.priority)">
+                      {{ task.priority }}
+                    </span>
+                  } @else {
+                    <select [(ngModel)]="editingTask()!.priority" class="edit-select">
+                      @for (priority of priorityOptions; track priority) {
+                        <option [value]="priority">{{ priority }}</option>
+                      }
+                    </select>
+                  }
+                </td>
+
+                <!-- Done -->
+                <td>
+                  <input
+                    type="checkbox"
+                    [checked]="task.done"
+                    (change)="toggleTaskDone(task, $any($event.target).checked)"
+                    [disabled]="!!task.dueDate"
+                  />
+                </td>
+
+                <!-- Actions -->
+                <td class="actions-column">
+                  <div class="action-group">
+                    @if (editingTask()?.id !== task.id) {
+                      <button (click)="editTask(task)" class="edit-btn">Edit</button>
+                    } @else {
+                      <button (click)="saveEdit()" class="save-btn">Save</button>
+                      <button (click)="cancelEdit()" class="cancel-btn">Cancel</button>
+                    }
+
+                    <button (click)="deleteTask(task.id!)" class="delete-btn">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      } @else {
+        <div class="empty-state">
+          <p>No tasks match the current search.</p>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="empty-state">
+      <p>No tasks found. Add a new task!</p>
+    </div>
+  }
+</div>

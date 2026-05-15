@@ -1,0 +1,132 @@
+<div class="container">
+  <h2>Add Scripts</h2>
+
+  <!-- Save Message -->
+  @if (savedMessage()) {
+    <div class="save-message">
+      {{ savedMessage() }}
+    </div>
+  }
+
+  <input [(ngModel)]="title" placeholder="Title" type="text" />
+  <textarea [(ngModel)]="text" placeholder="Text (Optional)"></textarea>
+  <textarea [(ngModel)]="sql" placeholder="SQL Script"></textarea>
+
+  <!-- 🔥 FILE UPLOAD (Professional Design) -->
+  <div class="file-upload-wrapper">
+    <label class="file-upload">
+      <input type="file" (change)="onFileSelected($event)" hidden />
+
+      <div class="file-upload-content">
+        <svg
+          class="upload-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+
+        <span class="upload-text">
+          {{ selectedFile ? selectedFile.name : 'Click to upload SQL file' }}
+        </span>
+      </div>
+    </label>
+  </div>
+
+  <button (click)="save()" class="main-save-btn">Save</button>
+
+  <!-- Search -->
+  <div class="search-wrapper">
+    <input
+      [ngModel]="snippetSearch()"
+      (ngModelChange)="snippetSearch.set($event)"
+      placeholder="Search Script by title"
+      type="text"
+      class="search-input"
+    />
+  </div>
+
+  <hr />
+
+  <h3>Saved Scripts</h3>
+
+  @for (s of filteredSnippets; track s.id) {
+    <div class="snippet-item">
+      <div class="snippet-header">
+        <div class="snippet-title-block">
+          <b>{{ s.title }}</b>
+
+          @if (s.text) {
+            <p class="snippet-description">{{ s.text }}</p>
+          }
+        </div>
+
+        <div class="snippet-actions">
+          <button class="download-btn" (click)="downloadSQL(s)" title="Download">
+            <svg
+              class="btn-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Download
+          </button>
+
+          <button class="edit-btn" (click)="startEdit(s)" title="Edit">
+            <svg
+              class="btn-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+            Edit
+          </button>
+
+          <button class="delete-btn" (click)="deleteSnippet(s.id)" title="Delete">
+            <svg
+              class="btn-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path
+                d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+              ></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+            Delete
+          </button>
+        </div>
+      </div>
+
+      @if (editingSnippet()?.id === s.id) {
+        <div class="snippet-edit-panel">
+          <input [(ngModel)]="editingSnippet()!.title" placeholder="Title" />
+          <textarea [(ngModel)]="editingSnippet()!.text" placeholder="Text"></textarea>
+          <textarea [(ngModel)]="editingSnippet()!.sql" placeholder="SQL Script"></textarea>
+
+          <div class="edit-actions">
+            <button class="save-btn" (click)="saveEdit()">💾 Save</button>
+            <button class="cancel-btn" (click)="cancelEdit()">✖ Cancel</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

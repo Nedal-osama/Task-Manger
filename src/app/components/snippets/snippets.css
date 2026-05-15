@@ -1,0 +1,270 @@
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Title */
+h2 {
+  color: var(--text-primary);
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  position: relative;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-500), var(--primary-600));
+  border-radius: 2px;
+}
+
+/* Message */
+.save-message {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 10000;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow-xl);
+}
+
+/* Inputs */
+input,
+textarea {
+  width: 100%;
+  padding: 0.875rem;
+  border: 2px solid var(--gray-200);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+textarea {
+  min-height: 120px;
+}
+
+/* Save button */
+.main-save-btn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  padding: 0.875rem 2rem;
+  border: none;
+  border-radius: 8px;
+  width: 200px;
+  margin: auto;
+  display: block;
+  cursor: pointer;
+}
+
+/* Search */
+.search-wrapper {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.search-input {
+  max-width: 400px;
+}
+
+/* Snippet Card */
+.snippet-item {
+  background: var(--bg-tertiary);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+}
+
+/* Header */
+.snippet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Title */
+.snippet-title-block b {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.snippet-description {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+}
+
+/* 🔥 ACTION BUTTONS */
+.snippet-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+/* FILE UPLOAD */
+.file-upload-wrapper {
+  margin-bottom: 1.5rem;
+}
+
+.file-upload {
+  display: block;
+  border: 2px dashed var(--gray-300);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--bg-secondary);
+}
+
+.file-upload:hover {
+  border-color: var(--primary-500);
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.file-upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.upload-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--primary-500);
+}
+
+.upload-text {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+}
+/* Button Icon */
+.btn-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 0.5rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Download Button */
+.download-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  background: linear-gradient(135deg, var(--success-500), var(--success-600));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.download-btn:hover {
+  background: linear-gradient(135deg, var(--success-600), var(--success-700));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+   color: rgb(15, 14, 14);
+}
+
+/* Edit Button */
+.edit-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  background: linear-gradient(135deg, var(--warning-500), var(--warning-600));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-btn:hover {
+  background: linear-gradient(135deg, var(--warning-600), var(--warning-700));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+   color: rgb(15, 14, 14);
+}
+
+/* Delete Button */
+.delete-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  background: linear-gradient(135deg, var(--error-500), var(--error-600));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-btn:hover {
+  background: linear-gradient(135deg, var(--error-600), var(--error-700));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+   color: rgb(15, 14, 14);
+}
+
+/* EDIT PANEL */
+.snippet-edit-panel {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 10px;
+}
+
+/* edit actions */
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* save */
+.save-btn {
+  background: #3b82f6;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+}
+
+/* cancel */
+.cancel-btn {
+  background: #e5e7eb;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+}

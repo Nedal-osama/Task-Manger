@@ -1,0 +1,86 @@
+<div class="login-container">
+  <div class="login-card">
+    <!-- Logo Section -->
+    <div class="logo-section">
+      <div class="logo-icon">✓</div>
+      <h1 class="brand-name">Task Manager</h1>
+    </div>
+
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <h2>Welcome Back</h2>
+      <p>Sign in to your account to continue</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <!-- Email -->
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <div class="input-wrapper">
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="Enter your email"
+            autocomplete="email"
+          />
+        </div>
+
+        @if (form.get('email')?.touched && form.get('email')?.invalid) {
+          <small class="error-text">
+            @if (form.get('email')?.errors?.['required']) {
+              Email address is required
+            } @else if (form.get('email')?.errors?.['email']) {
+              Please enter a valid email address
+            }
+          </small>
+        }
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrapper">
+          <input
+            type="password"
+            formControlName="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+          />
+        </div>
+
+        @if (form.get('password')?.touched && form.get('password')?.invalid) {
+          <small class="error-text">
+            @if (form.get('password')?.errors?.['required']) {
+              Password is required
+            } @else if (form.get('password')?.errors?.['minlength']) {
+              Password must be at least 6 characters
+            }
+          </small>
+        }
+      </div>
+
+      <!-- Server Error -->
+      @if (errorMessage) {
+        <div class="error-box">
+          <span class="error-icon">⚠️</span>
+          {{ errorMessage }}
+        </div>
+      }
+
+      <!-- Button -->
+      <button type="submit" class="login-btn" [disabled]="loading || form.invalid">
+        @if (!loading) {
+          <span>Sign In</span>
+          <span class="btn-icon">→</span>
+        } @else {
+          <span class="loader"></span>
+        }
+      </button>
+    </form>
+
+    <!-- Footer -->
+    <div class="footer-text">
+      <p>Secure login powered by modern authentication</p>
+    </div>
+  </div>
+</div>
