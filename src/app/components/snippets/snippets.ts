@@ -69,14 +69,20 @@ export class Snippets implements OnInit {
       formData.append('ScriptFile', this.selectedFile);
     }
 
-    this.service.create(formData).subscribe(() => {
-      this.title = '';
-      this.text = '';
-      this.sql = '';
-      this.selectedFile = null;
+    this.service.create(formData).subscribe({
+      next: () => {
+        this.title = '';
+        this.text = '';
+        this.sql = '';
+        this.selectedFile = null;
 
-      this.load();
-      this.showSaveMessage();
+        this.load();
+        this.showSaveMessage();
+      },
+      error: (error) => {
+        console.error('Error saving script:', error);
+        alert('حدث خطأ أثناء الحفظ. تأكد من أنك مسجل الدخول وأن بريدك الإلكتروني موجود.');
+      },
     });
   }
 

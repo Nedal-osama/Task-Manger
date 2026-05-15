@@ -9,7 +9,7 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   displayName: string;
-  email: string;
+  email?: string;
   token: string;
 }
 
@@ -24,8 +24,17 @@ export class AuthService {
   login(data: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(this.baseUrl, data).pipe(
       tap((res) => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('user', JSON.stringify(res));
+        const user = {
+          displayName: res.displayName,
+          email: res.email || data.email,
+          token: res.token,
+        };
+
+        localStorage.setItem('token', user.token);
+        localStorage.setItem('user', JSON.stringify(user));
+        if (user.email) {
+          localStorage.setItem('userEmail', user.email);
+        }
       }),
     );
   }
@@ -33,6 +42,7 @@ export class AuthService {
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('userEmail');
   }
 
   getToken(): string | null {
@@ -41,11 +51,24 @@ export class AuthService {
 
   getUser(): LoginResponse | null {
     const userJson = localStorage.getItem('user');
-    return userJson ? (JSON.parse(userJson) as LoginResponse) : null;
+    if (!userJson) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(userJson) as LoginResponse;
+    } catch {
+      return null;
+    }
   }
 
   getEmail(): string {
-    return this.getUser()?.email ?? '';
+    const user = this.getUser();
+    if (user?.email) {
+      return user.email;
+    }
+
+    return localStorage.getItem('userEmail') || '';
   }
 
   isLoggedIn(): boolean {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, map, throwError } from 'rxjs';
 import { AuthService } from './login';
 
 export interface ApiResponse<T> {
@@ -37,9 +37,14 @@ export class Snippetservice {
     return this.http.get<ApiResponse<ApiScript[]>>(this.baseUrl).pipe(map((res) => res.data || []));
   }
 
-  create(formData: FormData) {
-    const email = encodeURIComponent(this.getEmail());
-    return this.http.post<ApiResponse<string>>(`${this.baseUrl}?email=${email}`, formData);
+  create(formData: FormData): Observable<ApiResponse<string>> {
+    const email = this.getEmail();
+    if (!email) {
+      return throwError(() => new Error('Email is required to save a script.'));
+    }
+
+    const encodedEmail = encodeURIComponent(email);
+    return this.http.post<ApiResponse<string>>(`${this.baseUrl}?email=${encodedEmail}`, formData);
   }
 
   update(id: number, formData: FormData) {
